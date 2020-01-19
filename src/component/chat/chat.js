@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getMsgList, sendMsg, recvMsg, readMsg } from '../../redux/chat.redux'
 import { getChatId } from '../../util'
-
+import QueueAnim from 'rc-queue-anim'
 @connect(
     state => state,
     { getMsgList, sendMsg, recvMsg, readMsg }
@@ -81,26 +81,28 @@ class Chat extends React.Component {
             <div id="chat-page">
                 <NavBar icon={<Icon type="left" />} onLeftClick={() => props.history.goBack()} leftContent={<span style={{ fontSize: '20px' }}>{users[userid].name}</span>} mode='dark'></NavBar>
                 <div className="page-content">
-                    {chatmsgs.map(v => {
-                        const avatar = require(`../img/${users[v.from].avatar}.png`)
-                        return v.from == userid ? (
-                            <List key={v._id} >
-                                <Item
-                                    multipleLine
-                                    wrap={true}
-                                    thumb={avatar}
-                                >{v.content}</Item>
-                            </List>
-                        ) : (
+                    <QueueAnim delay={100} type='left'>
+                        {chatmsgs.map(v => {
+                            const avatar = require(`../img/${users[v.from].avatar}.png`)
+                            return v.from == userid ? (
                                 <List key={v._id} >
                                     <Item
                                         multipleLine
                                         wrap={true}
-                                        extra={<img alt="头像" src={avatar} />}
-                                        className='chat-me'>{v.content}</Item>
-                                </List >
-                            )
-                    })}
+                                        thumb={avatar}
+                                    >{v.content}</Item>
+                                </List>
+                            ) : (
+                                    <List key={v._id} >
+                                        <Item
+                                            multipleLine
+                                            wrap={true}
+                                            extra={<img alt="头像" src={avatar} />}
+                                            className='chat-me'>{v.content}</Item>
+                                    </List >
+                                )
+                        })}
+                    </QueueAnim>
                 </div>
                 <div className="stick-footer">
                     <List>

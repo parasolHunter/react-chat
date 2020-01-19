@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavBar } from "antd-mobile";
+import QueueAnim from 'rc-queue-anim'
 import { connect } from "react-redux";
 import { Switch, Route } from 'react-router-dom'
 import NavLinkBar from '../navlink/navlink'
@@ -56,16 +57,15 @@ class Dashboard extends React.Component {
                 component: User
             }
         ]
+        const page = navList.find(v => v.path === pathname)
         return (
             <div>
                 {/* {user.redirectTo ? <Redirect to={user.redirectTo} /> : null} */}
                 <NavBar className='fixd-header' mode='dard'>{navList.find(v => v.path === pathname) ? navList.find(v => v.path === pathname).title : null}</NavBar>
                 <div style={{ marginTop: 45 }}>
-                    <Switch>
-                        {navList.map(v => (
-                            <Route key={v.path} path={v.path} component={v.component}></Route>
-                        ))}
-                    </Switch>
+                    <QueueAnim type='alpha' delay={100} duration={1000}>
+                        <Route key={page.path} path={page.path} component={page.component}></Route>
+                    </QueueAnim>
                 </div>
                 <NavLinkBar data={navList}></NavLinkBar>
             </div>
