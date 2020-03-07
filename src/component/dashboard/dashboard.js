@@ -1,8 +1,8 @@
 import React from 'react'
-import { NavBar } from "antd-mobile";
+import { NavBar } from "antd-mobile"
 import QueueAnim from 'rc-queue-anim'
-import { connect } from "react-redux";
-import { Switch, Route } from 'react-router-dom'
+import { connect } from "react-redux"
+import { Route, Redirect } from 'react-router-dom'
 import NavLinkBar from '../navlink/navlink'
 import Boss from './../../container/boss/boss'
 import Genius from './../../container/genius/genius'
@@ -61,13 +61,15 @@ class Dashboard extends React.Component {
         return (
             <div>
                 {/* {user.redirectTo ? <Redirect to={user.redirectTo} /> : null} */}
-                <NavBar className='fixd-header' mode='dard'>{navList.find(v => v.path === pathname) ? navList.find(v => v.path === pathname).title : null}</NavBar>
-                <div style={{ marginTop: 45 }}>
-                    <QueueAnim type='alpha' delay={100} duration={1000}>
-                        <Route key={page.path} path={page.path} component={page.component}></Route>
-                    </QueueAnim>
-                </div>
-                <NavLinkBar data={navList}></NavLinkBar>
+                {page === undefined ? <Redirect to={'/login'} /> : <div>
+                    <NavBar className='fixd-header' mode='dard'>{navList.find(v => v.path === pathname) ? navList.find(v => v.path === pathname).title : null}</NavBar>
+                    <div style={{ marginTop: 45 }}>
+                        <QueueAnim type='alpha' delay={100} duration={1000}>
+                            <Route key={page.path} path={page.path} component={page.component}></Route>
+                        </QueueAnim>
+                    </div>
+                    <NavLinkBar data={navList}></NavLinkBar>
+                </div>}
             </div>
         )
     }

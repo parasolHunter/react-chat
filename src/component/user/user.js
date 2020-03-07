@@ -14,7 +14,6 @@ class User extends React.Component {
 		this.logout = this.logout.bind(this)
 	}
 	logout() {
-		console.log("注销")
 		const alert = Modal.alert
 		const alertInstance = alert('注销', '确认退出登录吗???', [
 			{ text: '取消', onPress: () => console.log('cancel') },
