@@ -4,6 +4,7 @@ const AUTH_SUCCESS = 'AUTH_SUCCESS'
 const ERROR_MSG = 'ERROR_MSG'
 const LOAD_DATA = 'LOAD_DATA'
 const LOGOUT = 'LOGOUT'
+const REDIRECT_TO = 'REDIRECT_TO'
 const initState = {
 	redirectTo: '',
 	msg: '',
@@ -21,6 +22,8 @@ export function user(state = initState, action) {
 			return { ...state, isAuth: false, msg: action.msg }
 		case LOGOUT:
 			return { ...initState, redirectTo: '/login' }
+		case REDIRECT_TO:
+			return { ...state, redirectTo: action.str }
 		default:
 			return state
 	}
@@ -40,6 +43,13 @@ export function loadData(userinfo) {
 
 export function logoutSubmit() {
 	return { type: LOGOUT }
+}
+
+export function setRedirect(str) {
+	return {
+		type: REDIRECT_TO,
+		str: str
+	}
 }
 
 export function update(data) {
@@ -103,5 +113,11 @@ export function regisger({ user, pwd, repeatpwd, type }) {
 				dispatch(errorMsg(res.msg))
 			}
 		})
+	}
+}
+
+export function redirect_to(str) {
+	return dispatch => {
+		dispatch(setRedirect(str))
 	}
 }

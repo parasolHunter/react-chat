@@ -1,13 +1,13 @@
 import React from 'react'
 import Logo from '../../component/logo/logo'
-import { List, InputItem, Radio, WhiteSpace, Button } from 'antd-mobile'
+import { List, InputItem, Radio, WhiteSpace, Button, NavBar, Icon } from 'antd-mobile'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { regisger } from '../../redux/user.redux'
+import { regisger, redirect_to } from '../../redux/user.redux'
 import imoocFrom from '../../component/imooc-form/imooc-form.js'
 @connect(
     state => state.user,
-    { regisger }
+    { regisger, redirect_to }
 )
 @imoocFrom
 class Register extends React.Component {
@@ -26,7 +26,8 @@ class Register extends React.Component {
         const props = this.props
         return (
             <div>
-                {/* {this.props.redirectTo ? <Redirect to={this.props.redirectTo} /> : null} */}
+                {this.props.redirectTo ? <Redirect to={this.props.redirectTo} /> : null}
+                <NavBar icon={<Icon type="left" />} onLeftClick={() => this.props.redirect_to('/login')} mode="dark" >注册</NavBar>
                 <Logo></Logo>
                 <List>
                     {this.props.msg ? <p className='error-msg'>{this.props.msg}</p> : null}

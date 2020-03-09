@@ -1,8 +1,13 @@
 import axios from './../axios'
 import { Toast } from 'antd-mobile'
 import io from 'socket.io-client'
-// const socket = io('ws://120.27.95.139:3000')
-const socket = io('ws://localhost:3000')
+let host = ''
+if (process.env.NODE_ENV == 'development') {
+    host = io('ws://localhost:3000')
+} else {
+    host = io('ws://120.27.95.139:3000')
+}
+const socket = host;
 
 // 获取聊天列表
 const MSG_LIST = 'MSG_LIST'
