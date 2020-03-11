@@ -16,14 +16,41 @@ class Chat extends React.Component {
         this.state = { text: '' }
     }
     componentDidMount() {
+        console.log(this.props)
         if (!this.props.chat.chatmsg.length && !Object.keys(this.props.chat.users).length) {
             this.props.getMsgList()
             this.props.recvMsg()
         }
     }
+    componentDidUpdate() {
+        this.initBox()
+        window.addEventListener('resize', () => {
+            this.initBox()
+        });
+
+    }
     componentWillUnmount() {
         let to = this.props.match.params.user
         this.props.readMsg(to)
+    }
+    initBox() {
+        var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; //浏览器高度
+        var header = document.getElementById('header')
+        var footer = document.getElementById('footer')
+        var middleC = document.getElementById('middleC')
+        var emojiBox = document.getElementById('emojiBox')
+        var contentHeight = document.getElementById('contentHeight')
+
+        var sult = ''
+        if (header && footer) {
+            sult = h - header.offsetHeight - footer.offsetHeight - 10
+        }
+        if (middleC) {
+            middleC.style.height = sult + 'px'
+            if (contentHeight) {//contentHeight.scrollHeight 里面div的实际高度
+                middleC.scrollTop = contentHeight.scrollHeight;  //网页可见高度
+            }
+        }
     }
     fixCarousel() {
         setTimeout(function () {
@@ -63,13 +90,12 @@ class Chat extends React.Component {
 
         let emojis = []
         emojis = emojis.concat(emoji_smileys, emoji_hand, emoji_people, emoji_plant)
-        console.log(emojis)
 
         const Item = List.Item
         const props = this.props
         const user = props.user
         const chat = props.chat
-        console.log(props)
+
         const userid = props.match.params.user
         const users = chat.users
         if (!users[userid]) {
@@ -79,32 +105,34 @@ class Chat extends React.Component {
         const chatmsgs = chat.chatmsg.filter(v => v.chatid === chatid)
         return (
             <div id="chat-page">
-                <NavBar icon={<Icon type="left" />} onLeftClick={() => props.history.goBack()} leftContent={<span style={{ fontSize: '20px' }}>{users[userid].name}</span>} mode='dark'></NavBar>
-                <div className="page-content">
-                    <QueueAnim delay={100} type='left'>
-                        {chatmsgs.map(v => {
-                            const avatar = require(`../img/${users[v.from].avatar}.png`)
-                            return v.from == userid ? (
-                                <List key={v._id} >
-                                    <Item
-                                        multipleLine
-                                        wrap={true}
-                                        thumb={avatar}
-                                    >{v.content}</Item>
-                                </List>
-                            ) : (
+                <NavBar id="header" icon={<Icon type="left" />} onLeftClick={() => props.history.goBack()} leftContent={<span style={{ fontSize: '20px' }}>{users[userid].name}</span>} mode='dark'></NavBar>
+                <div id="middleC" className="page-content" >
+                    <div id="contentHeight">
+                        <QueueAnim delay={100} type='left'>
+                            {chatmsgs.map(v => {
+                                const avatar = require(`../img/${users[v.from].avatar}.png`)
+                                return v.from == userid ? (
                                     <List key={v._id} >
                                         <Item
                                             multipleLine
                                             wrap={true}
-                                            extra={<img alt="头像" src={avatar} />}
-                                            className='chat-me'>{v.content}</Item>
-                                    </List >
-                                )
-                        })}
-                    </QueueAnim>
+                                            thumb={avatar}
+                                        >{v.content}</Item>
+                                    </List>
+                                ) : (
+                                        <List key={v._id} >
+                                            <Item
+                                                multipleLine
+                                                wrap={true}
+                                                extra={<img alt="头像" src={avatar} />}
+                                                className='chat-me'>{v.content}</Item>
+                                        </List >
+                                    )
+                            })}
+                        </QueueAnim>
+                    </div>
                 </div>
-                <div className="stick-footer">
+                <div id="footer" className="stick-footer">
                     <List>
                         <InputItem
                             placeholder='请输入'
@@ -127,6 +155,7 @@ class Chat extends React.Component {
                         >信息</InputItem>
                     </List>
                     {this.state.showEmoji ? <Grid
+                        id="emojiBox"
                         data={emojis}
                         columnNum={9}
                         carouselMaxRow={4}

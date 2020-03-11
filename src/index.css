@@ -23,10 +23,13 @@ body {
   height: auto;
 }
 .page-content{
-	padding:45px 5px;
+  padding: 45px 5px;
 }
 #chat-page .page-content{
-  padding: 0 0 50px 0;
+  padding: 0 0 10px 0;
+  overflow-y: scroll;
+  overflow: -moz-scrollbars;
+  -webkit-overflow-scrolling: touch;
 }
 #chat-page .am-grid-icon{
   display: none;
@@ -35,10 +38,10 @@ body {
   margin-top: 0;
 }
 .stick-footer{
-  position: fixed;
-  z-index: 1;
+  /* position: fixed; */
+  /* z-index: 1; */
   width: 100%;
-  bottom: 0;
+  /* bottom: 0; */
 }
 .chat-me.am-list-item .am-list-line .am-list-content{
   text-align: right;
@@ -49,4 +52,8 @@ body {
 }
 .chat-me.am-list-item .am-list-line-wrap{
   word-break: break-all;
+}
+#usercard-page .usercard-item{
+  word-break: break-all;
+  padding-bottom: 5px;
 }
